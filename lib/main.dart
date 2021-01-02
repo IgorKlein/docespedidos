@@ -74,24 +74,24 @@ class FormularioPedidos extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Editor(
-            rotulo: "Nome do cliente",
             dica: 'Ex.: João da Silva',
             controlador: _controladorCampoCliente,
+            rotulo: "Nome do cliente",
           ),
           Editor(
-            rotulo: "Produto",
             dica: 'Ex.: Kit Doces Finos 24un.',
             controlador: _controladorCampoProduto,
+            rotulo: "Produto",
           ),
           Editor(
-            rotulo: "Quantidade",
             dica: 'Ex.: 01',
             controlador: _controladorCampoQuantidade,
+            rotulo: "Quantidade",
           ),
           Editor(
-            rotulo: "Data de Entrega",
             dica: 'Ex.: 01/12/2021',
             controlador: _controladorCampoDataEntrega,
+            rotulo: "Data de Entrega",
           ),
           RaisedButton(
               child: Text(
@@ -99,8 +99,10 @@ class FormularioPedidos extends StatelessWidget {
                 style: TextStyle(fontSize: 16.0),
               ),
               onPressed: () {
+                debugPrint('Botão confirmar pressionado.');
                 _criaPedido(context);
-              }),
+              },
+          )
         ],
       ),
     );
@@ -112,17 +114,42 @@ class FormularioPedidos extends StatelessWidget {
     final double quantidade = double.tryParse(_controladorCampoQuantidade.text);
     final String dataEntrega = _controladorCampoDataEntrega.text;
 
-    if (nomeCliente != null &&
-        produto != null &&
-        quantidade != null &&
-        dataEntrega != null) {
+    if (nomeCliente != null && produto != null && quantidade != null && dataEntrega != null) {
+    // if (true) {
       final Pedido pedidoCriado =
           Pedido(nomeCliente, produto, quantidade, dataEntrega);
 
       debugPrint('Criando Pedido.');
       debugPrint('$pedidoCriado');
       Navigator.pop(context, pedidoCriado);
-    };
+    }
+  }
+}
+
+
+
+class Editor extends StatelessWidget {
+  final TextEditingController controlador;
+  final String rotulo;
+  final String dica;
+  final IconData icone;
+
+  Editor({Key key, this.controlador, this.rotulo, this.dica, this.icone});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TextField(
+        controller: controlador,
+        style: TextStyle(fontSize: 24.0),
+        decoration: InputDecoration(
+          icon: icone != null ? Icon(icone) : null, //Operador Ternário
+          labelText: rotulo,
+          hintText: dica,
+        ),
+      ),
+    );
   }
 }
 
@@ -135,40 +162,17 @@ class ItemPedido extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-      leading: Icon(Icons.monetization_on),
-      title: Text(pedido._cliente),
-      subtitle: Text(pedido.valorTotal.toString()),
-    ));
-  }
-}
-
-class Editor extends StatelessWidget {
-  final TextEditingController controlador;
-  final String rotulo;
-  final String dica;
-  final IconData icone;
-
-  const Editor({Key key, this.controlador, this.rotulo, this.dica, this.icone})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        style: TextStyle(fontSize: 24.0),
-        // style: TextStyle (fontSize: 24.0),
-        decoration: InputDecoration(
-          icon: icone != null ? Icon(icone) : null, //Operador Ternário
-          labelText: rotulo,
-          hintText: dica,
+          leading: Icon(Icons.monetization_on),
+          title: Text(pedido.cliente),
+          subtitle: Text(pedido.calculaValorTotal().toString()),
         ),
-      ),
     );
   }
 }
 
 class Pedido {
+  final double precoKitDocesFinos = 24.00;
+
   final String _cliente;
   final String _produto;
   final double _quantidade;
@@ -189,9 +193,12 @@ class Pedido {
 
   double get quantidade => _quantidade;
 
-  double get valorTotal {
-    final double precoKitDocesFinos = 24.00;
-    var quantidade = this._quantidade;
-    return precoKitDocesFinos * quantidade;
+  double calculaValorTotal () {
+    return precoKitDocesFinos * _quantidade;
+  }
+
+  @override
+  String toString() {
+    return 'Pedido{cliente: $cliente, produto: $produto, quantidade: $quantidade, valorTotal: $calculaValorTotal()}';
   }
 }
