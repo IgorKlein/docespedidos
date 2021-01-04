@@ -71,39 +71,41 @@ class FormularioPedidos extends StatelessWidget {
       appBar: AppBar(
         title: Text('Criando um novo pedido'),
       ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-            dica: 'Ex.: João da Silva',
-            controlador: _controladorCampoCliente,
-            rotulo: "Nome do cliente",
-          ),
-          Editor(
-            dica: 'Ex.: Kit Doces Finos 24un.',
-            controlador: _controladorCampoProduto,
-            rotulo: "Produto",
-          ),
-          Editor(
-            dica: 'Ex.: 01',
-            controlador: _controladorCampoQuantidade,
-            rotulo: "Quantidade",
-          ),
-          Editor(
-            dica: 'Ex.: 01/12/2021',
-            controlador: _controladorCampoDataEntrega,
-            rotulo: "Data de Entrega",
-          ),
-          RaisedButton(
-              child: Text(
-                'Confirmar',
-                style: TextStyle(fontSize: 16.0),
-              ),
-              onPressed: () {
-                debugPrint('Botão confirmar pressionado.');
-                _criaPedido(context);
-              },
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+              dica: 'Ex.: João da Silva',
+              controlador: _controladorCampoCliente,
+              rotulo: "Nome do cliente",
+            ),
+            Editor(
+              dica: 'Ex.: Kit Doces Finos 24un.',
+              controlador: _controladorCampoProduto,
+              rotulo: "Produto",
+            ),
+            Editor(
+              dica: 'Ex.: 01',
+              controlador: _controladorCampoQuantidade,
+              rotulo: "Quantidade",
+            ),
+            Editor(
+              dica: 'Ex.: 01/12/2021',
+              controlador: _controladorCampoDataEntrega,
+              rotulo: "Data de Entrega",
+            ),
+            RaisedButton(
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                onPressed: () {
+                  debugPrint('Botão confirmar pressionado.');
+                  _criaPedido(context);
+                },
+            )
+          ],
+        ),
       ),
     );
   }
